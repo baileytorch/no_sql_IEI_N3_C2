@@ -12,6 +12,7 @@
     <li>En el terminal ejecutar el comando: <code>npm install express mongoose cors body-parser</code></li>
     <li>Si el terminal NO tiene permisos para ejecutar scripts, le daremos permiso con el siguiente comando: <code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 </code></li>
-<li>Posterior a este comando, se puede volder a ejecutar los comandos anteriores.</li>
+    <li>Posterior a este comando, se puede volver a ejecutar los comandos anteriores.</li>
+    <li>Ahora se debe codificar el servidor backend.</li>
 </ol>
 

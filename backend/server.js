@@ -1,0 +1,44 @@
+// Importar depedencias del backend, cada librería se almacenará en una constante
+// La dependencia se almacenará como un objeto
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+// Iniciamos nuestra aplicación express
+const aplicacion = express();
+const puerto = 3000;
+
+// Instanciamos las depedencias de nuetra aplicación
+aplicacion.use(cors());
+aplicacion.use(express.json());
+aplicacion.use(bodyParser.urlencoded({extended:true}));
+aplicacion.use(bodyParser.json());
+
+// Conexion a MongoDB
+mongoose.connect('mongodb://localhost:27017/test')
+.then(() => console.log('Conexión Exitosa!') )
+.catch((excepcion) => console.log('No ha sido posible conectarse a la DB: ', excepcion));
+
+const usuario = new mongoose.Schema({
+    nombre: String,
+    correo: String,
+    contrasena: String,
+    genero: String,
+    fechaNacimiento: String
+});
+
+const Usuario = mongoose.model('Usuario',usuario,'usuarios');
+
+aplicacion.post('/guardarUsuario', async(req,res)=>{
+    try{
+        const{nombreIngresado,correoIngresado,contrasenaIngresada,generoIngresado,fechaNacimientoIngresada} = req.body;
+        const nuevoUsuario = new Usuario({nombreIngresado,correoIngresado,contrasenaIngresada,generoIngresado,fechaNacimientoIngresada});
+
+        await nuevoUsuario.save();
+        res.status(200).json({message:'Datos Ingresados Correctamente'});
+    }
+    catch(excepcion){
+        res.status(500).json({message:'No ha sido posible guardar los datos'});
+    }
+});
