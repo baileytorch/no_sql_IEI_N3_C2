@@ -1,102 +1,102 @@
 function validarFormulario() {
-    let campoNombre = document.getElementById('input_nombre');
-    let campoCorreo = document.getElementById('input_correo');
-    let campoContrasena = document.getElementById('input_contrasena');
-    let campoRepetirContrasena = document.getElementById('input_rep_contrasena');
-    let selectGenero = document.getElementById('selectGenero');
-    let campoFechaNacimiento = document.getElementById('inputNacimiento');
-    let campoArchivo = document.getElementById('inputFoto');
-    let campoError = document.getElementById('errorFormulario');
-    let listaErrores = document.getElementById('listaErrores');
+    let campoNombre = $('#input_nombre');
+    let campoCorreo = $('#input_correo');
+    let campoContrasena = $('#input_contrasena');
+    let campoRepetirContrasena = $('#input_rep_contrasena');
+    let selectGenero = $('#selectGenero');
+    let campoFechaNacimiento = $('#inputNacimiento');
+    let campoArchivo = $('#inputFoto');
+    let campoError = $('#errorFormulario');
+    let listaErrores = $('#listaErrores');
     let mensajeError = '';
     let formularioValido = true;
 
-    if (campoNombre.value == '') {
-        campoNombre.classList.add('is-invalid');
+    if (campoNombre.val() == '') {
+        campoNombre.addClass('is-invalid');
         mensajeError += '<li>El campo NOMBRE es requerido.</li>';
         formularioValido = false;
     } else {
-        campoNombre.classList.remove('is-invalid');
-        campoNombre.classList.add('is-valid');
+        campoNombre.removeClass('is-invalid');
+        campoNombre.addClass('is-valid');
     }
 
-    if (campoCorreo.value == '') {
-        campoCorreo.classList.add('is-invalid');
+    if (campoCorreo.val() == '') {
+        campoCorreo.addClass('is-invalid');
         mensajeError += '<li>El campo EMAIL es requerido.</li>';
         formularioValido = false;
     } else {
-        campoCorreo.classList.remove('is-invalid');
-        campoCorreo.classList.add('is-valid');
+        campoCorreo.removeClass('is-invalid');
+        campoCorreo.addClass('is-valid');
     }
 
-    if (!validarCorreo(campoCorreo.value)) {
-        campoCorreo.classList.add('is-invalid');
+    if (!validarCorreo(campoCorreo.val())) {
+        campoCorreo.addClass('is-invalid');
         mensajeError += '<li>EMAIL inválido.</li>';
         formularioValido = false;
     } else {
-        campoCorreo.classList.remove('is-invalid');
-        campoCorreo.classList.add('is-valid');
+        campoCorreo.removeClass('is-invalid');
+        campoCorreo.addClass('is-valid');
     }
 
-    if (campoContrasena.value == '') {
-        campoContrasena.classList.add('is-invalid');
+    if (campoContrasena.val() == '') {
+        campoContrasena.addClass('is-invalid');
         mensajeError += '<li>El campo CONTRASEÑA es requerido.</li>';
         formularioValido = false;
     } else {
-        campoContrasena.classList.remove('is-invalid');
-        campoContrasena.classList.add('is-valid');
+        campoContrasena.removeClass('is-invalid');
+        campoContrasena.addClass('is-valid');
     }
 
-    if (campoContrasena.value == '' || campoContrasena.value != '' && !validarContrasenaSegura(campoContrasena.value)) {
-        campoContrasena.classList.add('is-invalid');
+    if (campoContrasena.val() == '' || campoContrasena.val() != '' && !validarContrasenaSegura(campoContrasena.val())) {
+        campoContrasena.addClass('is-invalid');
         mensajeError += '<li>La CONTRASEÑA ingresada no es segura.</li>';
         formularioValido = false;
     } else {
-        campoContrasena.classList.remove('is-invalid');
-        campoContrasena.classList.add('is-valid');
+        campoContrasena.removeClass('is-invalid');
+        campoContrasena.addClass('is-valid');
     }
 
-    if (campoRepetirContrasena.value == '') {
-        campoRepetirContrasena.classList.add('is-invalid');
+    if (campoRepetirContrasena.val() == '') {
+        campoRepetirContrasena.addClass('is-invalid');
         mensajeError += '<li>El campo REPETIR CONTRASEÑA es requerido.</li>';
         formularioValido = false;
     } else {
-        campoRepetirContrasena.classList.remove('is-invalid');
-        campoRepetirContrasena.classList.add('is-valid');
+        campoRepetirContrasena.removeClass('is-invalid');
+        campoRepetirContrasena.addClass('is-valid');
     }
 
-    if (campoRepetirContrasena.value == '' || campoContrasena.value != '' && campoRepetirContrasena.value != campoContrasena.value) {
-        campoRepetirContrasena.classList.add('is-invalid');
+    if (campoRepetirContrasena.val() == '' || campoContrasena.val() != '' && campoRepetirContrasena.val() != campoContrasena.val()) {
+        campoRepetirContrasena.addClass('is-invalid');
         mensajeError += '<li>Las CONTRASEÑAS no coinciden.</li>';
         formularioValido = false;
     } else {
-        campoRepetirContrasena.classList.remove('is-invalid');
-        campoRepetirContrasena.classList.add('is-valid');
+        campoRepetirContrasena.removeClass('is-invalid');
+        campoRepetirContrasena.addClass('is-valid');
     }
 
-    if (selectGenero.value == '') {
-        selectGenero.classList.add('is-invalid');
+    if (selectGenero.val() == '') {
+        selectGenero.addClass('is-invalid');
         mensajeError += '<li>El campo GÉNERO es requerido.</li>';
         formularioValido = false;
     } else {
-        selectGenero.classList.remove('is-invalid');
-        selectGenero.classList.add('is-valid');
+        selectGenero.removeClass('is-invalid');
+        selectGenero.addClass('is-valid');
     }
 
-    if (campoFechaNacimiento.value == '') {
-        campoFechaNacimiento.classList.add('is-invalid');
+    if (campoFechaNacimiento.val() == '') {
+        campoFechaNacimiento.addClass('is-invalid');
         mensajeError += '<li>El campo FECHA DE NACIMIENTO es requerido.</li>';
         formularioValido = false;
     } else {
-        campoFechaNacimiento.classList.remove('is-invalid');
-        campoFechaNacimiento.classList.add('is-valid');
+        campoFechaNacimiento.removeClass('is-invalid');
+        campoFechaNacimiento.addClass('is-valid');
     }
 
     if (formularioValido) {
-        campoError.style.display = 'none';
+        campoError.show();
         alert('Formulario válido. Enviando datos...');
 
-        const formulario = document.getElementById('formularioRegistro');
+        const formulario = $('#formularioRegistro');
         const dataForm = new FormData(formulario);
         const datos = Object.fromEntries(dataForm.entries());
 
@@ -121,45 +121,49 @@ function validarFormulario() {
         }
         enviarFormulario();
     } else {
-        listaErrores.innerHTML = mensajeError;
-        campoError.style.display = 'block';
+        listaErrores.html(mensajeError);
+        campoError.show();
     }
 }
 
 function validarCorreo(email) {
     const expresion = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return expresion.test(email)
+    return expresion.test($(email).val())
 };
 
 function validarContrasenaSegura(contrasena) {
     const expresionRegular = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
-    return expresionRegular.test(contrasena)
+    return expresionRegular.test($(contrasena).val())
 }
 
 function validarElemento(elemento) {
-    if (elemento.value != '') {
-        elemento.classList.remove('is-invalid');
-        elemento.classList.add('is-valid');
+    elemento = $(elemento);
+    if (elemento.val() != '') {
+        elemento.removeClass('is-invalid');
+        elemento.addClass('is-valid');
     }
 };
 
 function validarCampoCorreo(elemento) {
-    if (elemento.value != '' && validarCorreo(elemento.value)) {
-        elemento.classList.remove('is-invalid');
-        elemento.classList.add('is-valid');
+    elemento = $(elemento);
+    if (elemento.val() != '' && validarCorreo(elemento.val())) {
+        elemento.removeClass('is-invalid');
+        elemento.addClass('is-valid');
     }
 };
 
 function validarCampoContrasena(elemento) {
-    if (elemento.value != '' && validarContrasenaSegura(elemento.value)) {
-        elemento.classList.remove('is-invalid');
-        elemento.classList.add('is-valid');
+    elemento = $(elemento);
+    if (elemento.val() != '' && validarContrasenaSegura(elemento.val())) {
+        elemento.removeClass('is-invalid');
+        elemento.addClass('is-valid');
     }
 };
 
 function validarCampoRepetirContrasena(elemento) {
-    if (elemento.value != '' && elemento.value == document.getElementById('input_contrasena').value) {
-        elemento.classList.remove('is-invalid');
-        elemento.classList.add('is-valid');
+    elemento = $(elemento);
+    if (elemento.val() != '' && elemento.val() == $('#input_contrasena').val()) {
+        elemento.removeClass('is-invalid');
+        elemento.addClass('is-valid');
     }
 };
