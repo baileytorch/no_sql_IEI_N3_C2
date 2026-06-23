@@ -1,9 +1,14 @@
+$(document).ready(function () {
+    cargarInfoPaises();
+});
+
 function validarFormulario() {
     let campoNombre = $('#input_nombre');
     let campoCorreo = $('#input_correo');
     let campoContrasena = $('#input_contrasena');
     let campoRepetirContrasena = $('#input_rep_contrasena');
     let selectGenero = $('#selectGenero');
+    let selectNacionalidad = $('#selectNacionalidad')
     let campoFechaNacimiento = $('#inputNacimiento');
     let campoArchivo = $('#inputFoto');
     let campoError = $('#errorFormulario');
@@ -35,6 +40,11 @@ function validarFormulario() {
 
     if (!validarInput(selectGenero)) {
         agregarError('<li>El campo GÉNERO es requerido.</li>');
+        formularioValido = false;
+    }
+
+    if (!validarInput(selectNacionalidad)) {
+        agregarError('<li>El campo NACIONALIDAD es requerido.</li>');
         formularioValido = false;
     }
 
@@ -106,7 +116,7 @@ function validarCorreo(elemento) {
             campo.removeClass('is-valid');
             return false
         }
-    }else{
+    } else {
 
     }
 };
@@ -147,9 +157,27 @@ function validarRepetirContrasena(elemento) {
     }
 };
 
-function agregarError(mensaje) {    
+function agregarError(mensaje) {
     let mensajeError = '';
     let listaErrores = $('#listaErrores');
     mensajeError += mensaje;
     listaErrores.append(mensajeError);
 }
+
+async function cargarInfoPaises() {
+    try {
+        const respuesta = await fetch('http://localhost:3000/obtenerPaises');
+        const paises = await respuesta.json();
+        console.log(paises);
+
+        const select = $('#selectNacionalidad');
+        $.each(paises, function (index,pais) {
+            select.append($('<option>', {
+                value: pais.iso2,
+                text: pais.nacionalidad
+            }));
+        });
+    } catch (error) {
+        console.log('Error al obtener los datos: ', error)
+    }
+};

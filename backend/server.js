@@ -26,18 +26,29 @@ const usuario = new mongoose.Schema({
     correo: String,
     contrasena: String,
     genero: String,
-    fechaNacimiento: String
+    fechaNacimiento: String,
+    nacionalidad: String
 });
 
 const Usuario = mongoose.model('Usuario', usuario, 'usuarios');
+
+const pais = new mongoose.Schema({
+    nombre: String,
+    iso2: String,
+    iso3: String,
+    codigoPais: String,
+    nacionalidad: String
+});
+
+const Pais = mongoose.model('Pais', pais, 'paises');
 
 // Método POST para guardar datos de USUARIO
 // Definimos el "ENDPOINT" o ruta final donde se canalizará la REQUEST (solicitud)
 aplicacion.post('/guardarUsuario', async (request, response) => {
     try {
         //
-        const { nombre, correo, contrasena, genero, fechaNacimiento } = request.body;
-        const nuevoUsuario = new Usuario({ nombre, correo, contrasena, genero, fechaNacimiento });
+        const { nombre, correo, contrasena, genero, fechaNacimiento, nacionalidad } = request.body;
+        const nuevoUsuario = new Usuario({ nombre, correo, contrasena, genero, fechaNacimiento, nacionalidad });
 
         await nuevoUsuario.save();
         response.status(200).json({ message: 'Datos Ingresados Correctamente' });
@@ -51,9 +62,28 @@ aplicacion.post('/guardarUsuario', async (request, response) => {
 aplicacion.get('/obtenerUsuarios', async (request, response) => {
     try {
         // Obtenemos una lista de objetos de tipo Usuario
-        const usuarios = await Usuario.find();
+        // Usamos agregaciones para obtener info desde otras colecciones e incorporarlas a nuestra colección
+        const usuarios = await Usuario.aggregate([{
+            $lookup:{
+                from:'paises', // Colección desde la que queremos traer datos
+                localField:'nacionalidad', // Campo de la colección con la info a buscar
+                foreignField:'nacionalidad', // Campo de la colecci´pn referenciada que quiero mostrar
+                as:'gentilicio' // Nuevo nombre del campo con la info
+            }
+        }]);
+
         // En la RESPONSE (res) formateamos los usuarios como JSON y los enviamos
         response.json(usuarios);
+    } catch (excepcion) {
+        response.status(500).json({ message: 'No ha sido posible obtener los datos. ', excepcion });
+    }
+});
+
+// Método GET para leer datos de PAISES
+aplicacion.get('/obtenerPaises', async (request, response) => {
+    try {
+        const paises = await Pais.find();
+        response.json(paises);
     } catch (excepcion) {
         response.status(500).json({ message: 'No ha sido posible obtener los datos. ', excepcion });
     }

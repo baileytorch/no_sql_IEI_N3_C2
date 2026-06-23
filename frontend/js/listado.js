@@ -30,7 +30,8 @@ async function obtenerUsuarios() {
                         return respuesta;
                     }
                 },
-                { data: 'fechaNacimiento' }
+                { data: 'fechaNacimiento' },
+                { data: 'nacionalidad' }
             ]
         });
     } catch (error) {
