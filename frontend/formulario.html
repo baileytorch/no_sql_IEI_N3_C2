@@ -52,12 +52,12 @@
                     <div class="col">
                         <label for="input_nombre" class="form-label">Nombre Usuario:</label>
                         <input class="form-control" type="text" name="nombre" id="input_nombre"
-                            placeholder="Ingrese su nombre" onchange="validarElemento(this)">
+                            placeholder="Ingrese su nombre" onchange="validarInput(this)">
                     </div>
                     <div class="col">
                         <label for="input_correo" class="form-label">Correo Electrónico:</label>
                         <input class="form-control" type="email" name="correo" id="input_correo"
-                            placeholder="Ingrese su nombre" onchange="validarCampoCorreo(this)">
+                            placeholder="Ingrese su nombre" onchange="validarCorreo(this)">
                     </div>
                 </div>
                 <br>
@@ -66,12 +66,12 @@
                     <div class="col">
                         <label for="input_contrasena" class="form-label">Contraseña:</label>
                         <input type="password" class="form-control" name="contrasena" id="input_contrasena"
-                            onchange="validarCampoContrasena(this)">
+                            onchange="validarContrasena(this)">
                     </div>
                     <div class="col">
                         <label for="input_rep_contrasena" class="form-label">Repetir Contraseña:</label>
                         <input type="password" class="form-control" name="input_repetir_contrasena"
-                            id="input_rep_contrasena" onchange="validarCampoRepetirContrasena(this)">
+                            id="input_rep_contrasena" onchange="validarRepetirContrasena(this)">
                     </div>
                 </div>
                 <br>
@@ -80,7 +80,7 @@
                     <div class="col">
                         <label class="form-label" for="selectGenero">Género:</label>
                         <select class="form-select" name="genero" id="selectGenero"
-                            onchange="validarElemento(this)">
+                            onchange="validarInput(this)">
                             <option selected value="">Seleccione su Género</option>
                             <option value="masc">Masculino</option>
                             <option value="fem">Femenino</option>
@@ -91,7 +91,7 @@
                     <div class="col">
                         <label for="inputNacimiento" class="form-label">Fecha de Nacimiento:</label>
                         <input type="date" class="form-control" name="fechaNacimiento" id="inputNacimiento"
-                            onchange="validarElemento(this)">
+                            onchange="validarInput(this)">
                     </div>
                 </div>
                 <br>

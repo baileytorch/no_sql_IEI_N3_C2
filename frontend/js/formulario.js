@@ -8,162 +8,148 @@ function validarFormulario() {
     let campoArchivo = $('#inputFoto');
     let campoError = $('#errorFormulario');
     let listaErrores = $('#listaErrores');
-    let mensajeError = '';
     let formularioValido = true;
 
-    if (campoNombre.val() == '') {
-        campoNombre.addClass('is-invalid');
-        mensajeError += '<li>El campo NOMBRE es requerido.</li>';
+    campoError.hide();
+    listaErrores.empty();
+
+    if (!validarInput(campoNombre)) {
+        agregarError('<li>El campo NOMBRE es requerido.</li>');
         formularioValido = false;
-    } else {
-        campoNombre.removeClass('is-invalid');
-        campoNombre.addClass('is-valid');
     }
 
-    if (campoCorreo.val() == '') {
-        campoCorreo.addClass('is-invalid');
-        mensajeError += '<li>El campo EMAIL es requerido.</li>';
+    if (!validarCorreo(campoCorreo)) {
+        agregarError('<li id="errorEmailRequerido">El campo EMAIL es requerido.</li>');
         formularioValido = false;
-    } else {
-        campoCorreo.removeClass('is-invalid');
-        campoCorreo.addClass('is-valid');
     }
 
-    if (!validarCorreo(campoCorreo.val())) {
-        campoCorreo.addClass('is-invalid');
-        mensajeError += '<li>EMAIL inválido.</li>';
+    if (!validarContrasena(campoContrasena)) {
+        agregarError('<li id="errorContrasenaRequerido">El campo CONTRASEÑA es requerido.</li>');
         formularioValido = false;
-    } else {
-        campoCorreo.removeClass('is-invalid');
-        campoCorreo.addClass('is-valid');
     }
 
-    if (campoContrasena.val() == '') {
-        campoContrasena.addClass('is-invalid');
-        mensajeError += '<li>El campo CONTRASEÑA es requerido.</li>';
+    if (!validarRepetirContrasena(campoRepetirContrasena)) {
+        agregarError('<li id="errorRepetirContrasenaRequerido">El campo REPETIR CONTRASEÑA es requerido.</li>');
         formularioValido = false;
-    } else {
-        campoContrasena.removeClass('is-invalid');
-        campoContrasena.addClass('is-valid');
     }
 
-    if (campoContrasena.val() == '' || campoContrasena.val() != '' && !validarContrasenaSegura(campoContrasena.val())) {
-        campoContrasena.addClass('is-invalid');
-        mensajeError += '<li>La CONTRASEÑA ingresada no es segura.</li>';
+    if (!validarInput(selectGenero)) {
+        agregarError('<li>El campo GÉNERO es requerido.</li>');
         formularioValido = false;
-    } else {
-        campoContrasena.removeClass('is-invalid');
-        campoContrasena.addClass('is-valid');
     }
 
-    if (campoRepetirContrasena.val() == '') {
-        campoRepetirContrasena.addClass('is-invalid');
-        mensajeError += '<li>El campo REPETIR CONTRASEÑA es requerido.</li>';
+    if (!validarInput(campoFechaNacimiento)) {
+        agregarError('<li>El campo FECHA DE NACIMIENTO es requerido.</li>');
         formularioValido = false;
-    } else {
-        campoRepetirContrasena.removeClass('is-invalid');
-        campoRepetirContrasena.addClass('is-valid');
-    }
-
-    if (campoRepetirContrasena.val() == '' || campoContrasena.val() != '' && campoRepetirContrasena.val() != campoContrasena.val()) {
-        campoRepetirContrasena.addClass('is-invalid');
-        mensajeError += '<li>Las CONTRASEÑAS no coinciden.</li>';
-        formularioValido = false;
-    } else {
-        campoRepetirContrasena.removeClass('is-invalid');
-        campoRepetirContrasena.addClass('is-valid');
-    }
-
-    if (selectGenero.val() == '') {
-        selectGenero.addClass('is-invalid');
-        mensajeError += '<li>El campo GÉNERO es requerido.</li>';
-        formularioValido = false;
-    } else {
-        selectGenero.removeClass('is-invalid');
-        selectGenero.addClass('is-valid');
-    }
-
-    if (campoFechaNacimiento.val() == '') {
-        campoFechaNacimiento.addClass('is-invalid');
-        mensajeError += '<li>El campo FECHA DE NACIMIENTO es requerido.</li>';
-        formularioValido = false;
-    } else {
-        campoFechaNacimiento.removeClass('is-invalid');
-        campoFechaNacimiento.addClass('is-valid');
     }
 
     if (formularioValido) {
-        campoError.show();
+        campoError.hide();
+        listaErrores.empty();
         alert('Formulario válido. Enviando datos...');
 
-        const formulario = $('#formularioRegistro');
+        const formulario = $('#formularioRegistro')[0];
         const dataForm = new FormData(formulario);
         const datos = Object.fromEntries(dataForm.entries());
 
         const enviarFormulario = async () => {
-            try{
-                const respuesta = await fetch('http://localhost:3000/guardarUsuario',{
-                    method:'POST',
-                    headers:{
-                        'Content-Type':'application/json'
+            try {
+                const respuesta = await fetch('http://localhost:3000/guardarUsuario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(datos)
                 });
 
                 const data = await respuesta.json();
                 console.log('Datos alcenados correctamente: ', data);
-                if (respuesta.ok){
+                if (respuesta.ok) {
                     window.location.href = './listado.html';
                 }
-            }catch(error){
+            } catch (error) {
                 console.log('Ha ocurrido un error: ', error);
             }
         }
         enviarFormulario();
     } else {
-        listaErrores.html(mensajeError);
         campoError.show();
     }
+};
+
+function validarInput(elemento) {
+    const campo = $(elemento)
+    if ($(elemento).val() == '') {
+        campo.addClass('is-invalid');
+        campo.removeClass('is-valid');
+        return false
+    } else {
+        campo.removeClass('is-invalid');
+        campo.addClass('is-valid');
+        return true
+    }
+};
+
+function validarCorreo(elemento) {
+    if (validarInput(elemento)) {
+        const campo = $(elemento);
+        const correo = $(elemento).val();
+        const regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (regexCorreo.test(correo)) {
+            campo.removeClass('is-invalid');
+            campo.addClass('is-valid');
+            return true
+        } else {
+            $('#errorEmailRequerido').remove();
+            agregarError('<li>El EMAIL es inválido.</li>');
+            campo.addClass('is-invalid');
+            campo.removeClass('is-valid');
+            return false
+        }
+    }else{
+
+    }
+};
+
+function validarContrasena(elemento) {
+    if (validarInput(elemento)) {
+        const campo = $(elemento);
+        const password = $(elemento).val();
+        const regexContrasena = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+        if (regexContrasena.test(password)) {
+            campo.removeClass('is-invalid');
+            campo.addClass('is-valid');
+            return true
+        } else {
+            $('#errorContrasenaRequerido').remove();
+            agregarError('<li>Su contraseña NO es segura, recuerde incluir al menos:<ul><li>1 Letra mayúscula.</li><li>1 Letra minúscula.</li><li>1 dígito.</li><li>1 caracter especial.</li><li>8 caracteres como mínimo.</li></ul></li>');
+            campo.addClass('is-invalid');
+            campo.removeClass('is-valid');
+            return false
+        }
+    }
+};
+
+function validarRepetirContrasena(elemento) {
+    if (validarInput(elemento)) {
+        const campo = $(elemento);
+        if ($(elemento).val() === $('#input_contrasena').val()) {
+            campo.removeClass('is-invalid');
+            campo.addClass('is-valid');
+            return true
+        } else {
+            $('#errorRepetirContrasenaRequerido').remove();
+            agregarError('<li>Sus contraseñas no son iguales.</li>');
+            campo.addClass('is-invalid');
+            campo.removeClass('is-valid');
+            return false
+        }
+    }
+};
+
+function agregarError(mensaje) {    
+    let mensajeError = '';
+    let listaErrores = $('#listaErrores');
+    mensajeError += mensaje;
+    listaErrores.append(mensajeError);
 }
-
-function validarCorreo(email) {
-    const expresion = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return expresion.test($(email).val())
-};
-
-function validarContrasenaSegura(contrasena) {
-    const expresionRegular = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
-    return expresionRegular.test($(contrasena).val())
-}
-
-function validarElemento(elemento) {
-    elemento = $(elemento);
-    if (elemento.val() != '') {
-        elemento.removeClass('is-invalid');
-        elemento.addClass('is-valid');
-    }
-};
-
-function validarCampoCorreo(elemento) {
-    elemento = $(elemento);
-    if (elemento.val() != '' && validarCorreo(elemento.val())) {
-        elemento.removeClass('is-invalid');
-        elemento.addClass('is-valid');
-    }
-};
-
-function validarCampoContrasena(elemento) {
-    elemento = $(elemento);
-    if (elemento.val() != '' && validarContrasenaSegura(elemento.val())) {
-        elemento.removeClass('is-invalid');
-        elemento.addClass('is-valid');
-    }
-};
-
-function validarCampoRepetirContrasena(elemento) {
-    elemento = $(elemento);
-    if (elemento.val() != '' && elemento.val() == $('#input_contrasena').val()) {
-        elemento.removeClass('is-invalid');
-        elemento.addClass('is-valid');
-    }
-};

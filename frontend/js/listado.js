@@ -19,10 +19,13 @@ async function obtenerUsuarios() {
                         switch (data) {
                             case 'masc':
                                 respuesta = 'Masculino';
+                                break;
                             case 'fem':
                                 respuesta = 'Femenino';
+                                break;
                             case 'otro':
                                 respuesta = 'Otro';
+                                break;
                         }
                         return respuesta;
                     }
