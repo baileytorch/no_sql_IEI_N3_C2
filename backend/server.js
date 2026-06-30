@@ -3,6 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 // Iniciamos nuestra aplicación express
 const aplicacion = express();
@@ -64,9 +65,13 @@ const Comuna = mongoose.model('Comuna', comuna, 'comunas');
 aplicacion.post('/guardarUsuario', async (request, response) => {
     try {
         //
-        const { nombre, correo, contrasena, genero, fechaNacimiento, nacionalidad,direccion } = request.body;
+        const { nombre, correo, contrasena, genero, fechaNacimiento, nacionalidad, direccion } = request.body;
+        // Encriptamos la contraseña recibida desde frontend
+        const salt = bcrypt.genSaltSync(10);
+        const contrasenaHash = bcrypt.hashSync(contrasena, salt);
+
         const objetoDireccion = JSON.parse(direccion);
-        const nuevoUsuario = new Usuario({ nombre, correo, contrasena, genero, fechaNacimiento, nacionalidad, direccion: objetoDireccion });
+        const nuevoUsuario = new Usuario({ nombre, correo, contrasena: contrasenaHash, genero, fechaNacimiento, nacionalidad, direccion: objetoDireccion });
 
         await nuevoUsuario.save();
         response.status(200).json({ message: 'Datos Ingresados Correctamente' });
